@@ -27,6 +27,20 @@ public class HousesController : ControllerBase
     }
   }
 
+  [HttpGet("{Id}")]
+  public ActionResult<House> Get(int Id)
+  {
+    try
+    {
+      House house = _housesService.Get(Id);
+      return house;
+    }
+    catch (Exception e)
+    {
+      return BadRequest(e.Message);
+    }
+  }
+  [HttpPost]
   public ActionResult<House> Create([FromBody] House houseData)
   {
     try
@@ -37,6 +51,33 @@ public class HousesController : ControllerBase
     catch (Exception e)
     {
       return BadRequest(e.Message);
+    }
+  }
+  [HttpPut("{Id}")]
+  public ActionResult<House> Update([FromBody] House houseData, int Id)
+  {
+    try
+    {
+      House house = _housesService.Update(houseData, Id);
+      return Ok(house);
+    }
+    catch (Exception e)
+    {
+      return BadRequest(e.Message);
+    }
+  }
+
+  [HttpDelete("{Id}")]
+  public ActionResult<string> Remove(int Id)
+  {
+    try
+    {
+        string message = _housesService.Remove(Id);
+        return message;
+    }
+    catch (Exception e)
+    {
+        return BadRequest(e.Message);
     }
   }
 }

@@ -21,6 +21,17 @@ public class HousesRepository
     List<House> houses = _db.Query<House>(sql).ToList();
     return houses;
   }
+  internal House Get(int id)
+  {
+    string sql = @"
+    SELECT
+    *
+    FROM houses
+    WHERE id = @id;
+    ";
+    House house = _db.Query<House>(sql, new { id }).FirstOrDefault();
+    return house;
+  }
 
   internal House Create(House houseData)
   {
@@ -35,5 +46,33 @@ public class HousesRepository
     int id = _db.ExecuteScalar<int>(sql, houseData);
     houseData.Id = id;
     return houseData;
+  }
+
+  internal bool Update(House houseData)
+  {
+    string sql = @"
+    UPDATE houses
+        SET
+        description = @description,
+        bathroom = @bathroom,
+        bedroom = @bedroom,
+        sqft = @sqft,
+        price = @price,
+        imgUrl = @imgUrl
+    WHERE id = @id;
+    ";
+    int rows = _db.Execute(sql, houseData);
+    return rows > 0;
+
+  }
+
+  internal bool Remove(int id)
+  {
+    string sql = @"
+    DELETE fROM houses
+    Where id = @id;
+    ";
+    int rows = _db.Execute(sql, new { id });
+    return rows > 0;
   }
 }
